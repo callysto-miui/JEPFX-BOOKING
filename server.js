@@ -7,23 +7,22 @@ const app = express();
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Validate env vars on startup so you know immediately if something's wrong
 const GMAIL_USER = process.env.GMAIL_USER;
 const GMAIL_PASS = process.env.GMAIL_APP_PASSWORD;
 
 if (!GMAIL_USER || !GMAIL_PASS) {
-  console.warn('⚠️  WARNING: GMAIL_USER or GMAIL_APP_PASSWORD is not set. Emails will fail.');
+  console.warn('WARNING: GMAIL_USER or GMAIL_APP_PASSWORD is not set.');
 }
 
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
   port: 465,
-  secure: true, // SSL — more reliable than service:'gmail'
+  secure: true,
   auth: {
     user: GMAIL_USER,
     pass: GMAIL_PASS,
   },
-  connectionTimeout: 10000, // 10s to connect
+  connectionTimeout: 10000,
   greetingTimeout: 10000,
   socketTimeout: 10000,
 });
@@ -41,7 +40,6 @@ const serviceLabels = {
 };
 
 app.post('/submit', async (req, res) => {
-  // Set a hard response timeout — always replies within 12s no matter what
   const timeout = setTimeout(() => {
     if (!res.headersSent) {
       res.status(504).json({ error: 'Request timed out. Please try again.' });
@@ -61,8 +59,7 @@ app.post('/submit', async (req, res) => {
       return res.status(500).json({ error: 'Email not configured on server. Contact the admin.' });
     }
 
-    const htmlBody = `
-<!DOCTYPE html>
+    const htmlBody = `<!DOCTYPE html>
 <html>
 <head>
   <style>
@@ -133,18 +130,49 @@ app.post('/submit', async (req, res) => {
 
   } catch (err) {
     clearTimeout(timeout);
-    console.error('Submit error:', err.message);
+
+    // Detailed logs visible in Render dashboard
+    console.error('=== EMAIL ERROR ===');
+    console.error('Message:', err.message);
+    console.error('Code:', err.code);
+    console.error('Response:', err.response);
+    console.error('ResponseCode:', err.responseCode);
+    console.error('==================');
+
+    let userMsg = 'Failed to send email.';
+    if (err.responseCode === 535 || err.code === 'EAUTH') {
+      userMsg = 'Gmail rejected credentials (535). Make sure you used an App Password, not your real password.';
+    } else if (err.responseCode === 534) {
+      userMsg = 'Gmail requires App Password (534). Regular passwords are not allowed.';
+    } else if (err.code === 'ECONNECTION' || err.code === 'ETIMEDOUT') {
+      userMsg = 'Could not reach Gmail SMTP. Try redeploying the server.';
+    } else if (err.message) {
+      userMsg = `Email error: ${err.message}`;
+    }
+
     if (!res.headersSent) {
-      res.status(500).json({ error: 'Failed to send email. Check server credentials.' });
+      res.status(500).json({ error: userMsg });
     }
   }
 });
 
-// Health check endpoint — keeps Render from sleeping (ping this every 5 min)
+// Health check — ping this with UptimeRobot to prevent Render cold starts
 app.get('/ping', (req, res) => res.json({ status: 'ok', time: new Date().toISOString() }));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`✅ JEPFX Booking running on port ${PORT}`);
-  console.log(`📧 Gmail user: ${GMAIL_USER || 'NOT SET'}`);
+  console.log(`📧 Gmail user: ${GMAIL_USER || 'NOT SET ⚠️'}`);
+  console.log(`🔑 App password set: ${GMAIL_PASS ? 'YES ✅' : 'NO ⚠️'}`);
+
+  // Test SMTP connection on startup
+  if (GMAIL_USER && GMAIL_PASS) {
+    transporter.verify((error) => {
+      if (error) {
+        console.error('❌ SMTP verify failed:', error.message, '| Code:', error.code);
+      } else {
+        console.log('✅ Gmail SMTP connection verified — ready to send!');
+      }
+    });
+  }
 });
