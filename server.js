@@ -16,8 +16,9 @@ if (!GMAIL_USER || !GMAIL_PASS) {
 
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
-  port: 465,
-  secure: true,
+  port: 587,
+  secure: false,  // STARTTLS — port 587, works on Render free tier
+  requireTLS: true,
   auth: {
     user: GMAIL_USER,
     pass: GMAIL_PASS,
