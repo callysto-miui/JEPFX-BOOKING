@@ -3,26 +3,28 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Phone Service Booking</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <title>JEPFX Booking</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #080c10;
-      --surface: #0d1117;
-      --surface2: #161b22;
-      --border: #21262d;
-      --border-hover: #388bfd;
-      --accent: #388bfd;
-      --accent2: #58a6ff;
-      --glow: rgba(56, 139, 253, 0.15);
-      --text: #e6edf3;
-      --muted: #8b949e;
-      --success: #3fb950;
-      --error: #f85149;
+      --bg: #0a0710;
+      --surface: #110d1a;
+      --surface2: #1a1428;
+      --border: #2a2040;
+      --border-hover: #8b5cf6;
+      --accent: #8b5cf6;
+      --accent2: #a78bfa;
+      --accent3: #c4b5fd;
+      --glow: rgba(139,92,246,0.18);
+      --glow2: rgba(139,92,246,0.08);
+      --text: #ede9fe;
+      --muted: #7c6f9e;
+      --success: #34d399;
+      --error: #f87171;
       --mono: 'JetBrains Mono', monospace;
-      --sans: 'Syne', sans-serif;
+      --sans: 'Outfit', sans-serif;
     }
 
     html { scroll-behavior: smooth; }
@@ -35,94 +37,153 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 40px 16px 80px;
+      padding: 48px 16px 100px;
       position: relative;
       overflow-x: hidden;
     }
 
-    /* Background grid */
+    /* Animated background */
+    .bg-orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+      animation: drift 12s ease-in-out infinite alternate;
+    }
+    .bg-orb-1 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(109,40,217,0.18) 0%, transparent 70%);
+      top: -150px; left: -100px;
+    }
+    .bg-orb-2 {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(139,92,246,0.12) 0%, transparent 70%);
+      bottom: 0; right: -100px;
+      animation-delay: -6s;
+    }
+    .bg-orb-3 {
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(167,139,250,0.08) 0%, transparent 70%);
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      animation-delay: -3s;
+    }
+
+    /* Grid overlay */
     body::before {
       content: '';
       position: fixed;
       inset: 0;
       background-image:
-        linear-gradient(rgba(56,139,253,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(56,139,253,0.04) 1px, transparent 1px);
-      background-size: 40px 40px;
+        linear-gradient(rgba(139,92,246,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(139,92,246,0.04) 1px, transparent 1px);
+      background-size: 44px 44px;
       pointer-events: none;
       z-index: 0;
     }
 
-    /* Radial glow top */
-    body::after {
-      content: '';
-      position: fixed;
-      top: -200px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 700px;
-      height: 500px;
-      background: radial-gradient(ellipse, rgba(56,139,253,0.12) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: 0;
+    @keyframes drift {
+      from { transform: translate(0, 0) scale(1); }
+      to { transform: translate(30px, 20px) scale(1.1); }
     }
 
     .container {
       position: relative;
       z-index: 1;
       width: 100%;
-      max-width: 620px;
+      max-width: 640px;
     }
 
-    /* Header */
+    /* ─── HEADER ─── */
     .header {
       text-align: center;
-      margin-bottom: 48px;
-      animation: fadeUp 0.6s ease both;
+      margin-bottom: 52px;
+      animation: fadeUp 0.7s cubic-bezier(0.22,1,0.36,1) both;
     }
 
-    .header .tag {
-      display: inline-block;
-      font-family: var(--mono);
-      font-size: 11px;
-      color: var(--accent);
-      border: 1px solid rgba(56,139,253,0.3);
-      background: rgba(56,139,253,0.08);
-      padding: 4px 14px;
-      border-radius: 20px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      margin-bottom: 20px;
+    .logo-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .logo-icon {
+      width: 48px; height: 48px;
+      background: linear-gradient(135deg, #7c3aed, #a78bfa);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 0 30px rgba(124,58,237,0.5);
+    }
+
+    .logo-text {
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #c4b5fd 0%, #8b5cf6 60%, #6d28d9 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .header h1 {
-      font-size: clamp(32px, 6vw, 52px);
+      font-size: clamp(30px, 6vw, 48px);
       font-weight: 800;
       line-height: 1.1;
       letter-spacing: -1px;
-      background: linear-gradient(135deg, #e6edf3 30%, #58a6ff 100%);
+      background: linear-gradient(160deg, #ede9fe 20%, #a78bfa 70%, #7c3aed 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
       margin-bottom: 14px;
     }
 
-    .header p {
+    .header-sub {
       color: var(--muted);
       font-size: 15px;
-      line-height: 1.6;
+      line-height: 1.7;
     }
 
-    /* Card */
+    /* ─── STEP BADGE ─── */
+    .step-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--accent2);
+      margin-bottom: 18px;
+    }
+
+    .step-num {
+      width: 22px; height: 22px;
+      background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    /* ─── CARD ─── */
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 36px 32px;
-      margin-bottom: 20px;
+      border-radius: 20px;
+      padding: 32px 28px;
+      margin-bottom: 16px;
       position: relative;
       overflow: hidden;
-      animation: fadeUp 0.6s ease both;
+      animation: fadeUp 0.7s cubic-bezier(0.22,1,0.36,1) both;
     }
 
     .card::before {
@@ -130,46 +191,25 @@
       position: absolute;
       top: 0; left: 0; right: 0;
       height: 1px;
-      background: linear-gradient(90deg, transparent, var(--accent), transparent);
-      opacity: 0.6;
+      background: linear-gradient(90deg, transparent 5%, var(--accent) 40%, var(--accent2) 60%, transparent 95%);
+      opacity: 0.5;
     }
 
-    .card:nth-child(2) { animation-delay: 0.1s; }
-    .card:nth-child(3) { animation-delay: 0.2s; }
+    .card:nth-child(2) { animation-delay: 0.08s; }
+    .card:nth-child(3) { animation-delay: 0.16s; }
+    .card:nth-child(4) { animation-delay: 0.24s; }
 
-    .card-title {
-      font-size: 13px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      color: var(--accent2);
-      margin-bottom: 24px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .card-title::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
-
-    /* Services grid */
+    /* ─── SERVICES GRID ─── */
     .services-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
     }
 
-    @media (max-width: 500px) {
+    @media (max-width: 480px) {
       .services-grid { grid-template-columns: 1fr; }
-      .card { padding: 24px 20px; }
-    }
-
-    .service-option {
-      position: relative;
+      .card { padding: 22px 18px; }
+      .row { grid-template-columns: 1fr; }
     }
 
     .service-option input[type="checkbox"] {
@@ -178,38 +218,41 @@
       width: 0; height: 0;
     }
 
+    .service-option {
+      position: relative;
+    }
+
     .service-option label {
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 14px 16px;
+      gap: 10px;
+      padding: 13px 14px;
       background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 10px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
       cursor: pointer;
       transition: all 0.2s ease;
       font-size: 14px;
+      font-weight: 500;
       color: var(--muted);
       user-select: none;
+      line-height: 1.2;
     }
 
     .service-option label:hover {
-      border-color: rgba(56,139,253,0.4);
+      border-color: rgba(139,92,246,0.45);
       color: var(--text);
-      background: rgba(56,139,253,0.06);
+      background: rgba(139,92,246,0.07);
     }
 
     .service-option input:checked + label {
       border-color: var(--accent);
       color: var(--text);
-      background: rgba(56,139,253,0.1);
-      box-shadow: 0 0 0 1px rgba(56,139,253,0.2) inset;
+      background: rgba(139,92,246,0.13);
+      box-shadow: 0 0 0 1px rgba(139,92,246,0.25) inset, 0 4px 20px rgba(139,92,246,0.12);
     }
 
-    .service-icon {
-      font-size: 18px;
-      flex-shrink: 0;
-    }
+    .service-icon { font-size: 17px; flex-shrink: 0; }
 
     .check-box {
       width: 18px; height: 18px;
@@ -220,419 +263,372 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.2s ease;
-      font-size: 11px;
+      transition: all 0.15s ease;
+      font-size: 10px;
     }
 
     .service-option input:checked + label .check-box {
-      background: var(--accent);
+      background: linear-gradient(135deg, #7c3aed, #a78bfa);
       border-color: var(--accent);
     }
 
     .service-option input:checked + label .check-box::after {
       content: '✓';
       color: #fff;
-      font-weight: 700;
+      font-weight: 800;
     }
 
-    /* Form fields */
-    .field {
-      margin-bottom: 20px;
-    }
-
+    /* ─── FIELDS ─── */
+    .field { margin-bottom: 18px; }
     .field:last-child { margin-bottom: 0; }
 
     .field label {
       display: block;
       font-size: 12px;
-      font-weight: 600;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 1.5px;
       color: var(--muted);
       margin-bottom: 8px;
     }
 
-    .field label span {
-      color: var(--error);
-      margin-left: 2px;
-    }
+    .field label .req { color: var(--error); margin-left: 2px; }
 
     .field input,
     .field textarea {
       width: 100%;
       background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 10px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
       padding: 13px 16px;
       color: var(--text);
       font-family: var(--mono);
       font-size: 14px;
       outline: none;
       transition: all 0.2s ease;
-      appearance: none;
     }
 
     .field textarea {
       resize: vertical;
-      min-height: 90px;
+      min-height: 88px;
       font-family: var(--sans);
+      font-size: 14px;
     }
 
     .field input::placeholder,
-    .field textarea::placeholder {
-      color: #3d444d;
-    }
+    .field textarea::placeholder { color: #3a2f55; }
 
     .field input:focus,
     .field textarea:focus {
       border-color: var(--accent);
       box-shadow: 0 0 0 3px var(--glow);
+      background: #130f1e;
     }
 
-    .field input.error,
-    .field textarea.error {
-      border-color: var(--error);
-    }
+    .field input.err { border-color: var(--error); box-shadow: 0 0 0 3px rgba(248,113,113,0.1); }
 
-    .prefix-wrap {
-      position: relative;
-    }
-
+    .prefix-wrap { position: relative; }
     .prefix-wrap .prefix {
-      position: absolute;
-      left: 16px;
-      top: 50%;
+      position: absolute; left: 15px; top: 50%;
       transform: translateY(-50%);
       color: var(--accent2);
       font-family: var(--mono);
       font-size: 14px;
       pointer-events: none;
     }
-
-    .prefix-wrap input {
-      padding-left: 30px;
-    }
+    .prefix-wrap input { padding-left: 28px; }
 
     .field-hint {
       font-size: 11px;
-      color: #3d444d;
-      margin-top: 6px;
+      color: #3a2f55;
+      margin-top: 5px;
       font-family: var(--mono);
     }
 
-    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    @media (max-width: 500px) { .row { grid-template-columns: 1fr; } }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 
-    /* Submit button */
+    .err-msg {
+      font-size: 12px;
+      color: var(--error);
+      margin-top: 6px;
+      font-family: var(--mono);
+      display: none;
+    }
+
+    /* ─── SUBMIT ─── */
     .submit-wrap {
-      animation: fadeUp 0.6s ease 0.3s both;
+      animation: fadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.32s both;
     }
 
     .submit-btn {
       width: 100%;
-      padding: 17px;
-      background: linear-gradient(135deg, #1f6feb, #388bfd);
+      padding: 18px;
+      background: linear-gradient(135deg, #6d28d9 0%, #7c3aed 40%, #8b5cf6 100%);
       border: none;
-      border-radius: 12px;
+      border-radius: 14px;
       color: #fff;
       font-family: var(--sans);
-      font-size: 16px;
+      font-size: 17px;
       font-weight: 700;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.3px;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.25s ease;
       position: relative;
       overflow: hidden;
+      box-shadow: 0 4px 24px rgba(109,40,217,0.35);
+    }
+
+    .submit-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+      opacity: 0;
+      transition: opacity 0.2s;
     }
 
     .submit-btn:hover:not(:disabled) {
-      transform: translateY(-1px);
-      box-shadow: 0 8px 30px rgba(56,139,253,0.35);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 40px rgba(109,40,217,0.5);
     }
+    .submit-btn:hover:not(:disabled)::before { opacity: 1; }
+    .submit-btn:active:not(:disabled) { transform: translateY(0); }
+    .submit-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none !important; }
 
-    .submit-btn:active:not(:disabled) {
-      transform: translateY(0);
-    }
-
-    .submit-btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-
-    .submit-btn .btn-text { transition: opacity 0.2s; }
-    .submit-btn .btn-loader { display: none; }
+    .btn-loader { display: none; align-items: center; justify-content: center; gap: 10px; }
+    .btn-text { display: flex; align-items: center; justify-content: center; gap: 8px; }
 
     .submit-btn.loading .btn-text { display: none; }
-    .submit-btn.loading .btn-loader { display: inline-block; }
+    .submit-btn.loading .btn-loader { display: flex; }
 
     .spinner {
       width: 20px; height: 20px;
-      border: 2px solid rgba(255,255,255,0.3);
+      border: 2.5px solid rgba(255,255,255,0.3);
       border-top-color: #fff;
       border-radius: 50%;
-      animation: spin 0.7s linear infinite;
+      animation: spin 0.65s linear infinite;
       display: inline-block;
-      vertical-align: middle;
     }
 
-    /* Toast */
+    /* ─── TOAST ─── */
     .toast {
       position: fixed;
-      bottom: 32px;
+      bottom: 28px;
       left: 50%;
-      transform: translateX(-50%) translateY(100px);
+      transform: translateX(-50%) translateY(120px);
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 16px 24px;
+      border-radius: 14px;
+      padding: 14px 20px;
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       gap: 12px;
-      font-size: 14px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
       transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
-      z-index: 100;
-      min-width: 280px;
-      max-width: 90vw;
+      z-index: 200;
+      min-width: 260px;
+      max-width: 88vw;
     }
-
     .toast.show { transform: translateX(-50%) translateY(0); }
-    .toast.success { border-color: rgba(63,185,80,0.4); }
-    .toast.error-toast { border-color: rgba(248,81,73,0.4); }
-
-    .toast-icon { font-size: 22px; }
-    .toast-msg { font-weight: 600; color: var(--text); }
+    .toast.t-success { border-color: rgba(52,211,153,0.35); }
+    .toast.t-error { border-color: rgba(248,113,113,0.35); }
+    .toast-icon { font-size: 20px; line-height: 1.3; flex-shrink: 0; }
+    .toast-msg { font-size: 14px; font-weight: 600; color: var(--text); }
     .toast-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
 
-    /* Success state */
+    /* ─── SUCCESS ─── */
     .success-view {
       display: none;
       text-align: center;
-      padding: 60px 32px;
-      animation: fadeUp 0.5s ease;
+      padding: 64px 28px;
     }
+    .success-view.active { display: block; animation: fadeUp 0.5s ease; }
 
-    .success-view.active { display: block; }
-
-    .success-circle {
-      width: 80px; height: 80px;
-      background: rgba(63,185,80,0.1);
-      border: 2px solid var(--success);
+    .success-ring {
+      width: 88px; height: 88px;
       border-radius: 50%;
+      background: rgba(52,211,153,0.1);
+      border: 2px solid var(--success);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 36px;
-      margin: 0 auto 24px;
-      animation: pop 0.4s cubic-bezier(0.34,1.56,0.64,1);
+      font-size: 38px;
+      margin: 0 auto 28px;
+      animation: pop 0.5s cubic-bezier(0.34,1.56,0.64,1);
+      box-shadow: 0 0 40px rgba(52,211,153,0.2);
     }
 
     .success-view h2 {
-      font-size: 26px;
+      font-size: 28px;
       font-weight: 800;
+      letter-spacing: -0.5px;
       margin-bottom: 12px;
+      background: linear-gradient(135deg, #ede9fe, #a78bfa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .success-view p {
       color: var(--muted);
       font-size: 15px;
-      line-height: 1.6;
+      line-height: 1.7;
       max-width: 380px;
-      margin: 0 auto 32px;
+      margin: 0 auto 36px;
     }
 
-    .new-booking-btn {
-      background: transparent;
-      border: 1px solid var(--border);
-      border-radius: 10px;
+    .reset-btn {
+      background: var(--surface2);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
       color: var(--muted);
       font-family: var(--sans);
       font-size: 14px;
-      padding: 12px 24px;
+      font-weight: 600;
+      padding: 13px 28px;
       cursor: pointer;
       transition: all 0.2s ease;
     }
+    .reset-btn:hover { border-color: var(--accent); color: var(--text); }
 
-    .new-booking-btn:hover {
-      border-color: var(--accent);
-      color: var(--text);
+    /* ─── REQUIRED HINT ─── */
+    .req-hint {
+      font-size: 12px;
+      color: #3a2f55;
+      text-align: right;
+      margin-bottom: 20px;
+      font-family: var(--mono);
     }
 
-    /* Animations */
+    /* ─── ANIMATIONS ─── */
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
+      from { opacity: 0; transform: translateY(24px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
+    @keyframes spin { to { transform: rotate(360deg); } }
     @keyframes pop {
-      from { transform: scale(0.5); opacity: 0; }
+      from { transform: scale(0.4); opacity: 0; }
       to { transform: scale(1); opacity: 1; }
-    }
-
-    .error-msg {
-      font-size: 12px;
-      color: var(--error);
-      margin-top: 6px;
-      font-family: var(--mono);
-    }
-
-    .required-hint {
-      font-size: 12px;
-      color: #3d444d;
-      text-align: right;
-      margin-bottom: 24px;
-      font-family: var(--mono);
     }
   </style>
 </head>
 <body>
 
+<div class="bg-orb bg-orb-1"></div>
+<div class="bg-orb bg-orb-2"></div>
+<div class="bg-orb bg-orb-3"></div>
+
 <div class="container">
 
   <!-- Header -->
   <div class="header">
-    <div class="tag">📱 Phone Tech Services</div>
+    <div class="logo-wrap">
+      <div class="logo-icon">📲</div>
+      <span class="logo-text">JEPFX</span>
+    </div>
     <h1>Book a Service</h1>
-    <p>Select what you need, fill in your device details,<br>and we'll get back to you on Telegram.</p>
+    <p class="header-sub">Select what you need, fill in your device details,<br>and we'll reach out on Telegram.</p>
   </div>
 
-  <!-- Main form -->
+  <!-- Form view -->
   <div id="formView">
+    <p class="req-hint">Fields marked <span style="color:var(--error)">*</span> are required</p>
 
-    <p class="required-hint">Fields marked <span style="color:var(--error)">*</span> are required</p>
-
-    <!-- Services -->
+    <!-- Step 1: Services -->
     <div class="card">
-      <div class="card-title">01 — Select Services</div>
+      <div class="step-badge"><span class="step-num">1</span> Choose Services</div>
       <div class="services-grid">
         <div class="service-option">
-          <input type="checkbox" id="svc-root" value="root">
-          <label for="svc-root">
-            <span class="service-icon">🔓</span>
-            <span>Root Access</span>
-            <span class="check-box"></span>
-          </label>
+          <input type="checkbox" id="s-root" value="root">
+          <label for="s-root"><span class="service-icon">🔓</span><span>Root Access</span><span class="check-box"></span></label>
         </div>
         <div class="service-option">
-          <input type="checkbox" id="svc-custom_rom" value="custom_rom">
-          <label for="svc-custom_rom">
-            <span class="service-icon">💿</span>
-            <span>Custom ROM</span>
-            <span class="check-box"></span>
-          </label>
+          <input type="checkbox" id="s-rom" value="custom_rom">
+          <label for="s-rom"><span class="service-icon">💿</span><span>Custom ROM</span><span class="check-box"></span></label>
         </div>
         <div class="service-option">
-          <input type="checkbox" id="svc-frp" value="frp">
-          <label for="svc-frp">
-            <span class="service-icon">🔑</span>
-            <span>FRP Bypass</span>
-            <span class="check-box"></span>
-          </label>
+          <input type="checkbox" id="s-frp" value="frp">
+          <label for="s-frp"><span class="service-icon">🔑</span><span>FRP Bypass</span><span class="check-box"></span></label>
         </div>
         <div class="service-option">
-          <input type="checkbox" id="svc-flash_firmware" value="flash_firmware">
-          <label for="svc-flash_firmware">
-            <span class="service-icon">⚡</span>
-            <span>Flash Firmware</span>
-            <span class="check-box"></span>
-          </label>
+          <input type="checkbox" id="s-flash" value="flash_firmware">
+          <label for="s-flash"><span class="service-icon">⚡</span><span>Flash Firmware</span><span class="check-box"></span></label>
         </div>
         <div class="service-option">
-          <input type="checkbox" id="svc-unlock_bootloader" value="unlock_bootloader">
-          <label for="svc-unlock_bootloader">
-            <span class="service-icon">🔧</span>
-            <span>Unlock Bootloader</span>
-            <span class="check-box"></span>
-          </label>
+          <input type="checkbox" id="s-boot" value="unlock_bootloader">
+          <label for="s-boot"><span class="service-icon">🔧</span><span>Unlock Bootloader</span><span class="check-box"></span></label>
         </div>
         <div class="service-option">
-          <input type="checkbox" id="svc-data_recovery" value="data_recovery">
-          <label for="svc-data_recovery">
-            <span class="service-icon">💾</span>
-            <span>Data Recovery</span>
-            <span class="check-box"></span>
-          </label>
+          <input type="checkbox" id="s-data" value="data_recovery">
+          <label for="s-data"><span class="service-icon">💾</span><span>Data Recovery</span><span class="check-box"></span></label>
         </div>
         <div class="service-option">
-          <input type="checkbox" id="svc-screen_repair" value="screen_repair">
-          <label for="svc-screen_repair">
-            <span class="service-icon">📱</span>
-            <span>Screen Repair</span>
-            <span class="check-box"></span>
-          </label>
+          <input type="checkbox" id="s-screen" value="screen_repair">
+          <label for="s-screen"><span class="service-icon">📱</span><span>Screen Repair</span><span class="check-box"></span></label>
         </div>
         <div class="service-option">
-          <input type="checkbox" id="svc-other" value="other">
-          <label for="svc-other">
-            <span class="service-icon">🛠️</span>
-            <span>Other / Custom</span>
-            <span class="check-box"></span>
-          </label>
+          <input type="checkbox" id="s-other" value="other">
+          <label for="s-other"><span class="service-icon">🛠️</span><span>Other / Custom</span><span class="check-box"></span></label>
         </div>
       </div>
-      <div id="serviceError" class="error-msg" style="display:none; margin-top:12px;">Please select at least one service.</div>
+      <div id="errServices" class="err-msg">⚠ Please select at least one service.</div>
     </div>
 
-    <!-- Contact -->
+    <!-- Step 2: Contact -->
     <div class="card">
-      <div class="card-title">02 — Contact Info</div>
+      <div class="step-badge"><span class="step-num">2</span> Contact Info</div>
       <div class="field">
-        <label>Telegram Username <span>*</span></label>
+        <label>Telegram Username <span class="req">*</span></label>
         <div class="prefix-wrap">
           <span class="prefix">@</span>
-          <input type="text" id="telegram" placeholder="yourUsername" autocomplete="off" spellcheck="false" />
+          <input type="text" id="fTelegram" placeholder="yourUsername" autocomplete="off" spellcheck="false" />
         </div>
-        <div class="field-hint">We'll contact you here with updates.</div>
-        <div id="telegramError" class="error-msg" style="display:none">Telegram username is required.</div>
+        <div class="field-hint">We'll send updates here — make sure DMs are open.</div>
+        <div id="errTelegram" class="err-msg">⚠ Telegram username is required.</div>
       </div>
     </div>
 
-    <!-- Device Info -->
+    <!-- Step 3: Device -->
     <div class="card">
-      <div class="card-title">03 — Device Info</div>
+      <div class="step-badge"><span class="step-num">3</span> Device Info</div>
       <div class="field">
-        <label>Phone Model <span>*</span></label>
-        <input type="text" id="phone" placeholder="e.g. Samsung Galaxy A54, Redmi Note 12" />
-        <div id="phoneError" class="error-msg" style="display:none">Phone model is required.</div>
+        <label>Phone Model <span class="req">*</span></label>
+        <input type="text" id="fPhone" placeholder="e.g. Samsung Galaxy A54, Xiaomi Redmi Note 12" />
+        <div id="errPhone" class="err-msg">⚠ Phone model is required.</div>
       </div>
       <div class="row">
         <div class="field">
           <label>Build Number</label>
-          <input type="text" id="buildNumber" placeholder="e.g. A546EXXS5CXB1" />
+          <input type="text" id="fBuild" placeholder="e.g. A546EXXS5CXB1" />
           <div class="field-hint">Settings → About Phone</div>
         </div>
         <div class="field">
           <label>Android Version</label>
-          <input type="text" id="androidVersion" placeholder="e.g. Android 14" />
+          <input type="text" id="fAndroid" placeholder="e.g. Android 14" />
           <div class="field-hint">Settings → About Phone</div>
         </div>
       </div>
       <div class="field">
         <label>Additional Notes</label>
-        <textarea id="notes" placeholder="Any extra info about your device or issue..."></textarea>
+        <textarea id="fNotes" placeholder="Any extra details about your issue or device…"></textarea>
       </div>
     </div>
 
     <!-- Submit -->
     <div class="submit-wrap">
-      <button class="submit-btn" id="submitBtn" onclick="submitForm()">
+      <button class="submit-btn" id="submitBtn" onclick="handleSubmit()">
         <span class="btn-text">Submit Request →</span>
-        <span class="btn-loader"><span class="spinner"></span></span>
+        <span class="btn-loader"><span class="spinner"></span> Sending…</span>
       </button>
     </div>
-
   </div>
 
   <!-- Success view -->
   <div class="card success-view" id="successView">
-    <div class="success-circle">✓</div>
-    <h2>Request Submitted!</h2>
-    <p>Your service request has been sent. We'll reach out to you on Telegram shortly. Make sure your account is open to messages.</p>
-    <button class="new-booking-btn" onclick="resetForm()">Submit Another Request</button>
+    <div class="success-ring">✓</div>
+    <h2>Request Sent!</h2>
+    <p>Your booking has been submitted successfully. We'll reach out to you on Telegram shortly — keep your DMs open!</p>
+    <button class="reset-btn" onclick="resetForm()">Submit Another Request</button>
   </div>
 
 </div>
@@ -647,90 +643,108 @@
 </div>
 
 <script>
+  let isSubmitting = false;
+
   function showToast(type, msg, sub) {
-    const toast = document.getElementById('toast');
+    const el = document.getElementById('toast');
     document.getElementById('toastIcon').textContent = type === 'success' ? '✅' : '❌';
     document.getElementById('toastMsg').textContent = msg;
     document.getElementById('toastSub').textContent = sub || '';
-    toast.className = `toast ${type === 'success' ? 'success' : 'error-toast'} show`;
-    setTimeout(() => toast.classList.remove('show'), 4000);
+    el.className = `toast ${type === 'success' ? 't-success' : 't-error'} show`;
+    setTimeout(() => el.classList.remove('show'), 4500);
   }
 
   function clearErrors() {
-    ['serviceError','telegramError','phoneError'].forEach(id => {
+    ['errServices','errTelegram','errPhone'].forEach(id => {
       document.getElementById(id).style.display = 'none';
     });
-    ['telegram','phone'].forEach(id => {
-      document.getElementById(id).classList.remove('error');
+    ['fTelegram','fPhone'].forEach(id => {
+      document.getElementById(id).classList.remove('err');
     });
   }
 
-  async function submitForm() {
+  function setLoading(state) {
+    const btn = document.getElementById('submitBtn');
+    if (state) {
+      btn.classList.add('loading');
+      btn.disabled = true;
+    } else {
+      btn.classList.remove('loading');
+      btn.disabled = false;
+    }
+    isSubmitting = state;
+  }
+
+  async function handleSubmit() {
+    if (isSubmitting) return; // prevent double-clicks
+
     clearErrors();
 
     const services = [...document.querySelectorAll('.service-option input:checked')].map(i => i.value);
-    const telegram = document.getElementById('telegram').value.trim().replace('@','');
-    const phone = document.getElementById('phone').value.trim();
-    const buildNumber = document.getElementById('buildNumber').value.trim();
-    const androidVersion = document.getElementById('androidVersion').value.trim();
-    const notes = document.getElementById('notes').value.trim();
+    const telegram = document.getElementById('fTelegram').value.trim().replace(/^@/, '');
+    const phone = document.getElementById('fPhone').value.trim();
+    const buildNumber = document.getElementById('fBuild').value.trim();
+    const androidVersion = document.getElementById('fAndroid').value.trim();
+    const notes = document.getElementById('fNotes').value.trim();
 
     let valid = true;
-
     if (services.length === 0) {
-      document.getElementById('serviceError').style.display = 'block';
+      document.getElementById('errServices').style.display = 'block';
       valid = false;
     }
     if (!telegram) {
-      document.getElementById('telegramError').style.display = 'block';
-      document.getElementById('telegram').classList.add('error');
+      document.getElementById('errTelegram').style.display = 'block';
+      document.getElementById('fTelegram').classList.add('err');
       valid = false;
     }
     if (!phone) {
-      document.getElementById('phoneError').style.display = 'block';
-      document.getElementById('phone').classList.add('error');
+      document.getElementById('errPhone').style.display = 'block';
+      document.getElementById('fPhone').classList.add('err');
       valid = false;
     }
-
     if (!valid) {
       document.querySelector('.card').scrollIntoView({ behavior: 'smooth' });
       return;
     }
 
-    const btn = document.getElementById('submitBtn');
-    btn.classList.add('loading');
-    btn.disabled = true;
+    setLoading(true);
 
     try {
       const res = await fetch('/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ services, telegram, phone, buildNumber, androidVersion, notes })
+        body: JSON.stringify({ services, telegram, phone, buildNumber, androidVersion, notes }),
+        signal: AbortSignal.timeout(15000) // 15 second timeout
       });
 
       const data = await res.json();
 
-      if (data.success) {
+      if (res.ok && data.success) {
         document.getElementById('formView').style.display = 'none';
         document.getElementById('successView').classList.add('active');
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
-        showToast('error', 'Failed to submit', data.error || 'Please try again.');
+        showToast('error', 'Submission failed', data.error || 'Please try again.');
+        setLoading(false);
       }
-    } catch (e) {
-      showToast('error', 'Network error', 'Check your connection and try again.');
-    } finally {
-      btn.classList.remove('loading');
-      btn.disabled = false;
+    } catch (err) {
+      if (err.name === 'TimeoutError') {
+        showToast('error', 'Request timed out', 'Server took too long — please try again.');
+      } else {
+        showToast('error', 'Network error', 'Check your connection and try again.');
+      }
+      setLoading(false);
     }
   }
 
   function resetForm() {
     document.querySelectorAll('.service-option input').forEach(i => i.checked = false);
-    ['telegram','phone','buildNumber','androidVersion'].forEach(id => document.getElementById(id).value = '');
-    document.getElementById('notes').value = '';
+    ['fTelegram','fPhone','fBuild','fAndroid'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('fNotes').value = '';
+    clearErrors();
     document.getElementById('successView').classList.remove('active');
     document.getElementById('formView').style.display = '';
+    setLoading(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 </script>
