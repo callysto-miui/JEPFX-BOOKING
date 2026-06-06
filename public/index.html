@@ -714,7 +714,7 @@
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ services, telegram, phone, buildNumber, androidVersion, notes }),
-        signal: AbortSignal.timeout(15000) // 15 second timeout
+        signal: AbortSignal.timeout(25000) // 25s — accounts for Render cold start
       });
 
       const data = await res.json();
@@ -728,8 +728,8 @@
         setLoading(false);
       }
     } catch (err) {
-      if (err.name === 'TimeoutError') {
-        showToast('error', 'Request timed out', 'Server took too long — please try again.');
+      if (err.name === 'TimeoutError' || err.name === 'AbortError') {
+        showToast('error', 'Server is waking up…', 'Render takes ~30s on first load. Wait a moment and try again.');
       } else {
         showToast('error', 'Network error', 'Check your connection and try again.');
       }
